@@ -36,9 +36,9 @@
 
     //use d3.queue to parallelize asynchronous data loading
     d3.queue()
-    .defer(d3.csv, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/georgia.csv?token=APHYF6ZYQPC6I4HYB3GALRLA76Q6G") //load attributes from csv
-    .defer(d3.json, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/us_states.json?token=APHYF643VQGXXC5THQYJUALA76RBA") //load background spatial data
-    .defer(d3.json, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/georgia.json?token=APHYF6236VJJEX3QEHNMTWDA76RC6") //load choropleth spatial data
+    .defer(d3.csv, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/georgia.csv?token=APHYF62MBJ2IJLOOHSAL6Y3A76RVS") //load attributes from csv
+    .defer(d3.json, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/us_states.topojson?token=APHYF65ABPARSJGO3F7Q4YLA76RUC") //load background spatial data
+    .defer(d3.json, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/georgia.topojson?token=APHYF6ZXAYQLOSC6EMOL32LA76RSO") //load choropleth spatial data
     .await(callback);
 
 
