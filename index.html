@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Georgia: US Election Census</title>
+
+    <link rel="shortcut icon" href="" type="image/x-icon">
+    <link rel="apple-touch-icon" href="">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/leaflet.css" />  
+    <link rel=stylesheet href="css/style.css">
+    </head>
+    
+</head>
+<body>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container"></div>
+            <h1>Georgia from 2016 to 2020</h1>
+            <div id="map">
+                <style>#map { width: 100%; height: 850px; margin-top: 2%;}</style></div>
+                    <hr>
+        </div>
+    </div>
+
+    <div class="page-wrapper chiller-theme toggled">
+        <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+        <i class="fas fa-chevron-left"></i>
+        </a>
+        <nav id="sidebar" class="sidebar-wrapper">
+           <div class="sidebar-content">
+              <div class="sidebar-brand">
+                 <a href="#"><img src="images/svgs/summit.svg" style="width: 50px;"> Mount Everest</a>
+                 <div id="close-sidebar">
+                    <i class="fas fa-times"></i>
+                 </div>
+              </div>
+              <div class="sidebar-header">
+                 <div class="loc-pic" id="locImg">
+                    <img class="img-responsive" src=""
+                       alt="Location picture">
+                 </div>
+              </div>
+              <!-- sidebar-header  -->
+              <div class="sidebar-menu">
+                 <ul>
+                    <li class="header-menu">
+                       <span id="Location">Location</span>
+                    </li>
+                    <li class="">
+                       <a href="#">
+                       <i class="fa fa-mountain"></i>
+                       <span>Elevation</span>
+                       </a>
+                       <p id="elevation"></p>
+                    </li>
+                    <li class="">
+                       <a href="#">
+                          <i class="fas fa-percent"></i>
+                       <span>Oxygen Level</span>
+                       </a>
+                       <p id="oxygen"></p>
+                    </li>
+                    <li class="">
+                       <a href="#">
+                           <i class="fas fa-hiking"></i>
+                           <span>Distance to Summit</span>
+                       </a>
+                       <p id="distToSummit"></p> 
+                    </li>
+                    <li class="">
+                       <a href="#">
+                           <i class="fas fa-hiking fa-flip-horizontal"></i>
+                           <span>Distance to Base Camp</span>
+                       </a>
+                       <p id="distToBaseCamp"></p> 
+                    </li>
+                   <li class="">
+                       <a href="#">
+                       <i class="fas fa-clipboard"></i>
+                       <span>Additional Information</span>
+                       </a>
+                       <p id="info"></p>
+                   </li>
+                 </ul>
+              </div>
+              <!-- sidebar-menu  -->
+           </div>
+           <!-- sidebar-content  -->
+        </nav>
+        <main class="page-content">
+
+       <div class="row">
+            <div class="col-md-12">
+	        <h4>Sources</h4>
+            <p>Underemployment: <a href="https://www.thebalance.com/what-is-unemployment-3306222" target="_blank">What is Underemployment?</a></p>
+            <p>Pew Research: <a href="https://www.pewresearch.org/fact-tank/2020/06/11/unemployment-rose-higher-in-three-months-of-covid-19-than-it-did-in-two-years-of-the-great-recession/#:~:text=The%20COVID%2D19%20outbreak%20and,20.5%20million%20in%20May%202020.&text=The%20COVID%2D19%20recession%2C%20barely,on%20unemployment%20among%20American%20workers." target="_blank">Unemployment rose higher in three months of COVID-19 than it did in two years of the Great Recession</a></p>
+            <p>BLS Data: <a href="https://www.bls.gov/lau/home.htm" target="_blank">Local Area Unemployment Statistics</a></p>
+            
+    </div>
+
+    <script src="js/jquery-3.6.0.js"></script>
+    <script src="js/leaflet.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/sidebar.js"></script>
+</body>
+
+</html>
