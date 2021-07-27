@@ -5,17 +5,7 @@
     var attrArray = ["Labor Force", "Employed", "Unemployed", "Unemployment Rate", "Median Household Income", "Med HH Income Percent of State Total"]; //list of attributes
     var expressed = attrArray[0]; //initial attribute
 
-        //chart frame dimensions
-    var chartWidth = window.innerWidth * 0.43,
-        chartHeight = 550,
-        leftPadding = 70,
-        rightPadding = 2,
-        topBottomPadding = 50,
-        chartInnerWidth = chartWidth - leftPadding - rightPadding,
-        chartInnerHeight = chartHeight - topBottomPadding * 2,
-        translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
-
-    
+   
     //begin script when window loads
     window.onload = setMap();
 
@@ -23,7 +13,7 @@
     function setMap(){
 
     //map frame dimensions
-    var width = window.innerWidth * 0.45,
+    var width = 1000,
         height = 800;
 
 
@@ -36,7 +26,7 @@
 
     //create Albers equal area conic projection centered on Philippines
     var projection = d3.geo.mercator()
-                .center([121,12.499176])
+                .center([82.90, 32.17])
                 .scale(2500)
                 .translate([width / 2, height / 2]);
 
@@ -46,36 +36,37 @@
 
     //use d3.queue to parallelize asynchronous data loading
     d3.queue()
-    .defer(d3.csv, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/georgia.csv?token=APHYF6ZURMZBTK77JC3FH5DA76N6C") //load attributes from csv
-    .defer(d3.json, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/georgia.json?token=APHYF643225H2ICGHXGIEBDA76LYS") //load choropleth spatial data
+    .defer(d3.csv, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/georgia.csv?token=APHYF6ZYQPC6I4HYB3GALRLA76Q6G") //load attributes from csv
+    .defer(d3.json, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/us_states.json?token=APHYF643VQGXXC5THQYJUALA76RBA") //load background spatial data
+    .defer(d3.json, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/georgia.json?token=APHYF6236VJJEX3QEHNMTWDA76RC6") //load choropleth spatial data
     .await(callback);
 
 
 
     //Callback within setMap
-    function callback(error, csvData, stats){
+    function callback(error, csvData, usstates, ga){
         
         setGraticule(map, path);
 
                 //translate SE Asia and Philippine Regions TopoJSON
-                var 
-                    philRegions = topojson.feature(philippines, philippines.objects.phregion).features;
+                var usstates = topojson.feature(usstates, usstates.objects.us_states),
+                    ga = topojson.feature(ga, ga.objects.georgia).features;
 
 
     //add SE Asian countries to map
     var countries = map.append("path")
-            .datum(seasianCountries)
+            .datum(usstates)
             .attr("class", "countries")
             .attr("d", path);
         
     //join csv data to GeoJSON enumeration units
-    philRegions = joinData(philRegions, csvData);
+    ga = joinData(ga, csvData);
 
         //create the color scale
         var colorScale = makeColorScale(csvData);
 
     //add enumeration units to the map
-        setEnumerationUnits(philRegions, map, path, colorScale);
+        setEnumerationUnits(ga, map, path, colorScale);
         setChart(csvData, colorScale);
         createDropdown(csvData)
         };
@@ -108,13 +99,13 @@
     //loop through csv to assign each set of csv attribute values to geojson region
     for (var i=0; i<csvData.length; i++){
         var csvRegion = csvData[i]; //the current region
-        var csvKey = csvRegion.Pcode; //the CSV primary key
+        var csvKey = csvRegion.FIPS; //the CSV primary key
 
         //loop through geojson regions to find correct region
-        for (var a=0; a<philRegions.length; a++){
+        for (var a=0; a<ga.length; a++){
 
             var geojsonProps = philRegions[a].properties; //the current region geojson properties
-            var geojsonKey = geojsonProps.Pcode; //the geojson primary key
+            var geojsonKey = ga.FIPS; //the geojson primary key
 
             //where primary keys match, transfer csv data to geojson properties object
             if (geojsonKey == csvKey){
@@ -128,20 +119,20 @@
         };
     };
         
-    return philRegions;
+    return ga;
 
     };
 
 
 
-    function setEnumerationUnits(philRegions, map, path, colorScale){
+    function setEnumerationUnits(ga, map, path, colorScale){
         //add Philippine regions to map
         var regions = map.selectAll(".regions")
-            .data(philRegions)
+            .data(ga)
             .enter()
             .append("path")
             .attr("class", function(d){
-                return "regions " + d.properties.Pcode;
+                return "regions " + d.properties.FIPS;
             })
             .attr("d", path) 
             .style("fill", function(d){
@@ -163,11 +154,7 @@
     //function to create color scale generator
     function makeColorScale(data){
     var colorClasses = [
-        "#FFB449",
-        "#FDDD5C",
-        "#FDFD97",
-        "#789FCC",
-        "#10B3CF"
+        "#eed000",
     ];
 
     //create color scale generator
@@ -183,7 +170,7 @@
     };
 
     //cluster data using ckmeans clustering algorithm to create natural breaks
-    var clusters = ss.ckmeans(domainArray, 5);
+    var clusters = ss.ckmeans(domainArray, 1);
     //reset domain array to cluster minimums
     domainArray = clusters.map(function(d){
         return d3.min(d);
@@ -248,7 +235,7 @@
     //function to highlight enumeration units and bars
     function highlight(props){
     //change stroke
-    var selected = d3.selectAll("." + props.Pcode)
+    var selected = d3.selectAll("." + props.FIPS)
         .style("stroke", "aqua")
         .style("stroke-width", "2");
     setLabel(props)
@@ -256,7 +243,7 @@
 
     //function to reset the element style on mouseout
     function dehighlight(props){
-    var selected = d3.selectAll("." + props.Pcode)
+    var selected = d3.selectAll("." + props.FIPS)
         .style("stroke", function(){
             return getStyle(this, "stroke")
         })
@@ -289,12 +276,12 @@
     var infolabel = d3.select("body")
         .append("div")
         .attr("class", "infolabel")
-        .attr("id", props.Regions + "_label")
+        .attr("id", props.FIPS + "_label")
         .html(labelAttribute);
 
     var regionName = infolabel.append("div")
         .attr("class", "labelname")
-        .html(props.Regions);
+        .html(props.FIPS);
     };
 
 
