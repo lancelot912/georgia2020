@@ -15,13 +15,7 @@
         chartInnerHeight = chartHeight - topBottomPadding * 2,
         translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
 
-    //create a scale to size bars proportionally to frame and for axis
-    //stretches value bar height
-    var yScale = d3.scale.linear()
-        .range([485, 70])
-        .domain([0, 26000]);
-
-
+    
     //begin script when window loads
     window.onload = setMap();
 
@@ -52,20 +46,19 @@
 
     //use d3.queue to parallelize asynchronous data loading
     d3.queue()
-    .defer(d3.csv, "data/emigrantph.csv") //load attributes from csv
-    .defer(d3.json, "data/seasia.topojson") //load background spatial data
-    .defer(d3.json, "data/phregion.topojson") //load choropleth spatial data
+    .defer(d3.csv, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/georgia.csv?token=APHYF6ZURMZBTK77JC3FH5DA76N6C") //load attributes from csv
+    .defer(d3.json, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/georgia.json?token=APHYF643225H2ICGHXGIEBDA76LYS") //load choropleth spatial data
     .await(callback);
 
 
 
     //Callback within setMap
-    function callback(error, csvData, seasian, philippines){
+    function callback(error, csvData, stats){
         
         setGraticule(map, path);
 
                 //translate SE Asia and Philippine Regions TopoJSON
-                var seasianCountries = topojson.feature(seasian, seasian.objects.seasia),
+                var 
                     philRegions = topojson.feature(philippines, philippines.objects.phregion).features;
 
 
@@ -220,79 +213,7 @@
 
 
 
-    //function to create coordinated bar chart
-    function setChart(csvData, colorScale){
-    //chart main frame dimensions
-    var chartWidth = window.innerWidth * 0.45,
-        chartHeight = 550,
-        leftPadding = 65,
-        rightPadding = 10,
-        topBottomPadding = 69,
-        chartInnerWidth = chartWidth - leftPadding - rightPadding-10,
-        //-10 raises bottom of inner chart 10 pixels
-        chartInnerHeight = chartHeight - topBottomPadding-14,
-        translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
-
-    //create a second svg element to hold the bar chart
-    var chart = d3.select("body")
-        .append("svg")
-        .attr("width", chartWidth)
-        .attr("height", chartHeight)
-        .attr("class", "chart");
-
-    //create a scale to size bars proportionally to frame and for axis
-    //stretches vertical scale bar
-    var yScale = d3.scale.linear()
-        .range([535, 120])
-        .domain([0, 26000]);
-
-    //set bars for each province
-    var bars = chart.selectAll(".bars")
-        .data(csvData)
-        .enter()
-        .append("rect")
-        .sort(function(a, b){
-            return b[expressed]-a[expressed]
-        })
-        .attr("class", function(d){
-            return "bars " + d.Pcode;
-        })
-        //width of actual vertical bars
-        .attr("width", chartInnerWidth / csvData.length - 2)  
-        .on("mouseover", highlight)
-        .on("mouseout", dehighlight)
-        .on("mousemove", moveLabel);
-
-    var desc = bars.append("desc")
-        .text('{"stroke": "none", "stroke-width": "1px"}');
-
-    //create a text element for the chart title
-    var chartTitle = chart.append("text")
-        .attr("x", 55)
-        .attr("y", 42)
-        .attr("class", "chartTitle")
-        
-    var chartFrame = chart.append("rect")
-        .attr("class", "chartFrame")
-        .attr("width", chartInnerWidth)
-        .attr("height", chartInnerHeight)
-        .attr("transform", translate);
-
-    //create vertical axis generator
-    var yAxis = d3.svg.axis()
-        .scale(yScale)
-        .orient("left");
-
-    //place axis
-    var axis = chart.append("g")
-        .attr("class", "axis")
-        .attr("transform", "translate(65,0)")
-        .call(yAxis);
-
-    //set bar positions, heights, and colors
-    updateChart(bars, csvData.length, colorScale); 
-    };
-
+   
     //function to create a dropdown menu for attribute selection
     function createDropdown(csvData){
     //add select element
@@ -322,56 +243,7 @@
     function changeAttribute(attribute, csvData){
     //change the expressed attribute
     expressed = attribute;
-
-    
-    //recreate the color scale
-    var colorScale = makeColorScale(csvData);
-
-    //recolor enumeration units
-    var regions = d3.selectAll(".regions")
-        .transition()
-        .duration(3000)
-        .style("fill", function(d){
-            return choropleth(d.properties, colorScale)
-        })
-
-        //re-sort, resize, and recolor bars
-    var bars = d3.selectAll(".bars")
-        //re-sort bars
-        .sort(function(a, b){
-            return b[expressed] - a[expressed];
-        })
-        .transition() //add animation
-        .delay(function(d, i){
-            return i * 20
-        })
-        .duration(1000);
-
-    updateChart(bars, csvData.length, colorScale);
     };
-
-
-    //function to position, size, and color bars in chart
-    function updateChart(bars, n, colorScale){
-    //position bars
-    bars.attr("x", function(d, i){
-            return i * (chartInnerWidth / n) + leftPadding;
-        })
-        //size/resize bars
-        .attr("height", function(d, i){
-            return 485 - yScale(parseFloat(d[expressed]));
-        })
-        .attr("y", function(d, i){
-            return yScale(parseFloat(d[expressed])) + topBottomPadding;
-        })
-        //color/recolor bars
-        .style("fill", function(d){
-            return choropleth(d, colorScale);
-        })
-    var chartTitle = d3.select(".chartTitle")
-        .text("Emigrants from every region in " + [expressed]);
-    };
-
 
     //function to highlight enumeration units and bars
     function highlight(props){
