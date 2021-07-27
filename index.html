@@ -1,115 +1,38 @@
+<!--Lance Lazarte GEOG575 Lab2-->
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+            <title>Overseas Filipino Workers</title>
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <title>Georgia: US Election Census</title>
-
-    <link rel="shortcut icon" href="" type="image/x-icon">
-    <link rel="apple-touch-icon" href="">
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="css/leaflet.css" />  
-    <link rel=stylesheet href="css/style.css">
+        <!--External stylesheet links-->
+        <link rel="stylesheet" href="css/style.css">
+        
     </head>
-    
-</head>
-<body>
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container"></div>
-            <h1>Georgia from 2016 to 2020</h1>
-            <div id="map">
-                <style>#map { width: 100%; height: 850px; margin-top: 2%;}</style></div>
-                    <hr>
-        </div>
-    </div>
 
-    <div class="page-wrapper chiller-theme toggled">
-        <a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
-        <i class="fas fa-chevron-left"></i>
-        </a>
-        <nav id="sidebar" class="sidebar-wrapper">
-           <div class="sidebar-content">
-              <div class="sidebar-brand">
-                 <a href="#"><img src="images/svgs/summit.svg" style="width: 50px;"> Mount Everest</a>
-                 <div id="close-sidebar">
-                    <i class="fas fa-times"></i>
-                 </div>
-              </div>
-              <div class="sidebar-header">
-                 <div class="loc-pic" id="locImg">
-                    <img class="img-responsive" src=""
-                       alt="Location picture">
-                 </div>
-              </div>
-              <!-- sidebar-header  -->
-              <div class="sidebar-menu">
-                 <ul>
-                    <li class="header-menu">
-                       <span id="Location">Location</span>
-                    </li>
-                    <li class="">
-                       <a href="#">
-                       <i class="fa fa-mountain"></i>
-                       <span>Elevation</span>
-                       </a>
-                       <p id="elevation"></p>
-                    </li>
-                    <li class="">
-                       <a href="#">
-                          <i class="fas fa-percent"></i>
-                       <span>Oxygen Level</span>
-                       </a>
-                       <p id="oxygen"></p>
-                    </li>
-                    <li class="">
-                       <a href="#">
-                           <i class="fas fa-hiking"></i>
-                           <span>Distance to Summit</span>
-                       </a>
-                       <p id="distToSummit"></p> 
-                    </li>
-                    <li class="">
-                       <a href="#">
-                           <i class="fas fa-hiking fa-flip-horizontal"></i>
-                           <span>Distance to Base Camp</span>
-                       </a>
-                       <p id="distToBaseCamp"></p> 
-                    </li>
-                   <li class="">
-                       <a href="#">
-                       <i class="fas fa-clipboard"></i>
-                       <span>Additional Information</span>
-                       </a>
-                       <p id="info"></p>
-                   </li>
-                 </ul>
-              </div>
-              <!-- sidebar-menu  -->
-           </div>
-           <!-- sidebar-content  -->
-        </nav>
-        <main class="page-content">
+    <body>
+        <div id="title">Filipinos Migrating from All Regions (1999-2019)</div>
 
-       <div class="row">
+        <div class="row">
             <div class="col-md-12">
-	        <h4>Sources</h4>
-            <p>Underemployment: <a href="https://www.thebalance.com/what-is-unemployment-3306222" target="_blank">What is Underemployment?</a></p>
-            <p>Pew Research: <a href="https://www.pewresearch.org/fact-tank/2020/06/11/unemployment-rose-higher-in-three-months-of-covid-19-than-it-did-in-two-years-of-the-great-recession/#:~:text=The%20COVID%2D19%20outbreak%20and,20.5%20million%20in%20May%202020.&text=The%20COVID%2D19%20recession%2C%20barely,on%20unemployment%20among%20American%20workers." target="_blank">Unemployment rose higher in three months of COVID-19 than it did in two years of the Great Recession</a></p>
-            <p>BLS Data: <a href="https://www.bls.gov/lau/home.htm" target="_blank">Local Area Unemployment Statistics</a></p>
             
-    </div>
+            <p>As a third-world country, the Philippines is abundant in hard-working people with an effort that is second to none. However, the effort doesn't equal high-paying jobs, 
+                making it difficult to continue working in the country. If the goal is to help their families be better, the solution is to find work overseas while sacrificing time 
+                to be with their families. Overseas Filipino Workers or known more as OFWs, are the driving force to the Filipino economy as their significant contributions fuel the 
+                growth leading to developments and opportunities for the betterment of the Filipino future. As of <a href="https://psa.gov.ph/sites/default/files/attachments/hsd/pressrelease/Press%20Release%202019%20SOF%20signed.pdf">2020</a>, there are estimated 2.2 million OFWs around the world. </p>
+            <p>Data Source: <a href="https://cfo.gov.ph/statistics-2/">Commission on Filipino Overseas, 2019</a></p>
+                
+        </div>
 
-    <script src="js/jquery-3.6.0.js"></script>
-    <script src="js/leaflet.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/sidebar.js"></script>
-</body>
-
+        <!--External script links-->
+        <script src="https://d3js.org/d3.v3.min.js"></script>
+        <script type="text/javascript" src="lib/d3-queue.v3.min.js"></script>
+        <script type="text/javascript" src="lib/topojson.js"></script>
+        <script src="https://unpkg.com/simple-statistics@7.0.8/dist/simple-statistics.min.js"></script>
+        <script type="text/javascript" src="lib/jquery-3.5.1.js"></script>
+        <script type="text/javascript" src="lib/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+        
+    </body>
 </html>
