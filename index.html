@@ -1,467 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-            <title></title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
 
-            <!--P O T E N T I A L  F O N T S-->
-          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand">
-          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gotu">
-          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English&display=swap">
+    <!--put your external stylesheet links here-->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="lib/leaflet.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 
+  </head>
 
-          <!-- PROJECT STYLE SHEETS-->
-          <link rel="stylesheet" href="css/bootstrap.min.css">
-          <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-          <link rel="stylesheet" href="css/animation.css">
-          <link rel="stylesheet" href="css/style.css">
+  <body>
 
-          <!-- FAVICON -->
-          <link rel="icon" href="img/Favicon.jpg">
+    <div class="card">
 
-    </head>
-
-    <body>
-        <!--WEBSITE TITLE AND AUTHORSHIP-->
-        <header class="header">
-
-          <div class="area" >
-            <ul class="circles">
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-            </ul>
+      <div class="card-header container-fluid">
+        <div class="row">
+          <div class="col-md-10">
+            <h4 class="w-75 p-1">The Voters of Georgia</h4>
           </div>
+          <div class="col-md-2 float-right">
+            <!-- Button trigger modal -->
+              <!-- Button trigger modal -->
+              <button id="modal-btn">About</button>
+              <div class="modal">
+                <div class= "row">
+                  <div class = "col-6 offset-3">
+                    <div class="modal-content">
+                      <span class="close-btn">&times;</span>
+                      <h5 style = "text-align:center">Georgia Voters 2020</h5>
+                      <p>It is a tool to learn the background of all the residents who voted
+                        in the State of Georgia.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="overlay"></div>  
+          </div>
+        </div>
+      </div>
+    </div>
+      <div class="card-body">
+      
 
-            <h1 id="headerText">States: Helping or Harming Elections?</em></h1>
-            <em><h5 id="subheaderText">Created by: Chris Archuleta, Regan Murray, and Michael Biehl</h5></em>
-            <h3 id="Welcome">Welcome</h3>
-            <p id="Welcome">This website briefly presents recent data pertaining to state legislation on voting.
-              Several important laws that impact voting abilities are presented in the map below and explained in detail afterwards.
-              Some states pass laws making it easier to vote while others pass stricter laws.
-              This data is especially relevant now as many states
-              have gotten stricter with their voting laws, with one important moment being the conclusion of the
-              <b><em><a id="welcomelink" href="https://www.supremecourt.gov/opinions/12pdf/12-96_6k47.pdf" target="_blank" class="externallink">Shelby County v. Holder</a></em></b> Supreme Court case in 2013.
-              A key dimension in the issue of voting laws is that of <em><a id="welcomelink" href="#voterID" class="externallink">voter suppression</a></em>, the systematic disabling and discouragement of minority votes.
-            </p>
-            <br>
+        <div class="row align-items-center">
 
-        </header>
+          <div class = "col-6">
 
-        <div class="retrieveContainer">
-            <div class="retrievePanel">
-              <p id ="retrieveTitle" style="color : white" >
-                No State Selected
-              </p>
+            <div class="card" style="height: 120px">
+              <div class="card-body">
 
+                
+                  <div class = "row">
+                    <div class = "col-8">
+                      <form name="form1" id="submit-form1">
+                        <div class="form-group row">
+                          <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Categories</label>
+                          <div class="col-sm-7">
+                            <select class="category-select form-control form-control-sm" name = "overall-category" aria-label="Default select example">
+                              <option value = "" selected>Pick A Category</option>      
+                              <option value="labor">Labor</option>
+                              <option value="totalvotes">Total Votes</option>
+                              <option value="demographic">Demographic</option>
+                              <option value="income">Income</option>
+                              <option value="education">Education</option>
+                            </select>
+                          </div>
+                        </div>
+    
+                        <div class="form-group row">
+                          <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Variables</label>
+                          <div class="col-sm-7">
+                            <select class="measure-select form-control form-control-sm" disabled = "disabled" name = "subcategory" aria-label="Default select example">
+                              <option value = "" selected>Please Select Attribute</option>                   
+                              <option value="LaborForce" class = "labor">Labor Force</option>
+                              <option value="Employed" class = "labor">Employed</option>
+                              <option value="Unemployed" class = "labor">Unemployed</option>
+                              <option value="UnemploymentRate" class = "labor">Unemployment Rate</option>
+                              <option value="MedianIncome" class = "income">Median Income</option>
+                              <option value="MedianIncomePercent" class = "income">Median Income %</option>
+                              <option value="AnnualIncome" class = "income">Annual Income</option>
+                              <option value="TotalVotes" class = "totalvotes">Total Votes</option>
+                              <option value="TotalVotes_Democratic" class = "totalvotes">Democratic Votes %</option>
+                              <option value="TotalVotes_Republican" class = "totalvotes">Republican Votes %</option>
+                              <option value="TotalVotes_Libertarian" class = "totalvotes">Libertarian Votes %</option>
+                              <option value="VoterTurnout_BlackFemale" class = "demographic">Black Female</option>
+                              <option value="VoterTurnout_BlackMale" class = "demographic">Black Male</option>
+                              <option value="VoterTurnout_WhiteFemale" class = "demographic">White Female</option>
+                              <option value="VoterTurnout_WhiteMale" class = "demographic">White Male</option>
+                              <option value="VoterTurnout_Asian" class = "demographic">Asian</option>
+                              <option value="VoterTurnout_Hispanic" class = "demographic">Hispanic</option>
+                              <option value="VoterTurnout_OtherRace" class = "demographic">Other Race</option>
+                              <option value="Male" class = "demographic">Male</option>
+                              <option value="Female" class = "demographic">Female</option>
+                              <option value="Not_HS_Graduate" class = "education">Not High School Graduate</option>
+                              <option value="HS_Graduate" class = "education">High School Graduate</option>
+                              <option value="Some_College" class = "education">Some College</option>
+                              <option value="College_Graduate" class = "education">College Graduate</option>
+                              </select>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+
+                    <div class = "col-2 align-self-center">
+                     
+                      <div class = "button">
+                        <button id = "submit-button" type="button" class="btn btn-primary btn-sm btn-block">Submit</button>
+                        
+                      </div>
+                      <div class = "button">
+                        <button id = "reset-button" type="button" class="btn btn-warning btn-sm btn-block">Reset</button>
+                      </div>
+                     
+                      
+                    </div>
+                  
+                   
+                </div>
+                  
+
+                
+              </div>
             </div>
+           
+          </div>
+          
+
+          <div class = "col-5 offset-1 ">
+
+            <div class="card" style="height: 120px">
+              <div class="card-body">
+                <h5 id = "variable-name">Variable: Voter Population</h5>
+                <!-- <h5 class="card-title">Special title treatment</h5> -->
+                <p id = "variable-definition">Estimated voter population.</p>
+                <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+              </div>
+            </div>
+            
+          </div>
         </div>
 
-        <!-- ROW CONTAINING LEGEND, MAP, AND RETRIEVE PANEL COLUMNS -->
-        <div class="map-row">
-
-            <!-- LEGEND COLUMN START -->
-            <div class="legend-column">
-
-                <!-- ACCORDION LEGEND -->
-                <div class="panel-group" id="accordion">
-
-                    <!-- ACCORDION SECTION 1 -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                              <a class="collapsed1" data-toggle="collapse" data-parent="#accordion" href="#collapse1">Composite Grade</a>
-                        </div>
-                        <div id="collapse1" class="panel-collapse collapse in">
-                          <div class="panel-body">
-
-                            <img src="./img/Legible Example.png" style="width:100%">
-
-                          </div>
-                        </div>
-                    </div>
-
-                    <!-- ACCORDION SECTION 2 -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                              <a class="collapsed2" data-toggle="collapse" data-parent="#accordion" href="#collapse2">Early Voting Status</a>
-                        </div>
-                        <div id="collapse2" class="panel-collapse collapse">
-                          <div class="panel-body">
-
-                            <img src="./img/Example Early Vote.png" style="width:100%">
-
-                            <!-- <p class="SubText">LEGEND CONTENT</p> -->
-
-                          </div>
-                        </div>
-                    </div>
-
-                    <!-- ACCORDION SECTION 3 -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                              <a class="collapsed3" data-toggle="collapse" data-parent="#accordion" href="#collapse3">Incorrectly Cast Provisional Vote</a>
-                        </div>
-                        <div id="collapse3" class="panel-collapse collapse">
-                          <div class="panel-body">
-
-                            <img src="./img/Example Provisional Vote.png" style="width:100%">
-
-                          </div>
-                        </div>
-                    </div>
-
-                    <!-- ACCORDION SECTION 4 -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                              <a class="collapsed4" data-toggle="collapse" data-parent="#accordion" href="#collapse4">Online Registration</a>
-                        </div>
-                        <div id="collapse4" class="panel-collapse collapse">
-                          <div class="panel-body">
-
-                            <img src="./img/Example Online Reg.png" style="width:100%">
-
-                          </div>
-                        </div>
-                    </div>
-
-                    <!-- ACCORDION SECTION 5 -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                              <a class="collapsed5" data-toggle="collapse" data-parent="#accordion" href="#collapse5">Voter ID Requirement</a>
-                        </div>
-                        <div id="collapse5" class="panel-collapse collapse">
-                          <div class="panel-body">
-
-                            <img src="./img/Example ID.png" style="width:100%">
-
-                          </div>
-                        </div>
-                    </div>
-
-                    <!-- ACCORDION SECTION 6 -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                              <a class="collapsed6" data-toggle="collapse" data-parent="#accordion" href="#collapse6">Election Day Vote Centers</a>
-                        </div>
-                        <div id="collapse6" class="panel-collapse collapse">
-                          <div class="panel-body">
-
-                            <img src="./img/Example Vote Centers.png" style="width:100%">
-
-                          </div>
-                        </div>
-                    </div>
-
-                    <!-- ACCORDION SECTION 7 -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                              <a class="collapsed7" data-toggle="collapse" data-parent="#accordion" href="#collapse7">Voting Rights Lost to Felons</a>
-                        </div>
-                        <div id="collapse7" class="panel-collapse collapse">
-                          <div class="panel-body">
-
-                            <img src="./img/Example Felony.png" style="width:100%">
-
-                          </div>
-                        </div>
-                    </div>
-
-                </div> <!--END OF ACCORDION LEGEND -->
-
+        <br>
+        <div class = "row">
+          <!-- <div class = "card"> -->
+            <div class = "mapcol col-7">
+              <div id="mapid"></div>
             </div>
-            <!-- END OF LEGEND COLUMN -->
 
-            <!-- MAP COLUMN START -->
-            <div class="map-column">
-
-                <div class="mapContainer">
-
-                </div>
-
+            <div class = "col-5">
+              <div class = "row">
+                <div id = "bar-chart-title" class = "bar-chart-title chart-title">Total Population by County</div>
+                <div id = "barChart"></div>
+              </div>
+              <div class = "row">
+                <div id = "line-chart-title" class = "line-chart-title chart-title">Total Population by Georgia County 2020</div>
+                <div id = "lineChart"></div>
+              </div>
             </div>
-            <!-- END OF MAP COLUMN -->
+          <!-- </div> -->
+        </div>
 
+        <div class = "row">
+          <div class = "col-4 offset-7">
+            <div id = "lineChart" width = 600 height =400></div>
+          </div>
+
+
+        </div>
+       
       </div>
-      <!-- END OF CONTAINER ROW FOR LEGEND, MAP, AND INFO PANEL -->
+    </div>
 
-      <!-- START OF ACCORDION FOR OVERLAY -->
-      <!-- <div id="accordion2"> -->
+    
+    <div class = "row">
+      
 
-          <!-- <div class="panel2 panel-default">
-              <div class="panel-heading">
-                  <h4 class="panel-title">
-                    <a class="collapsed overlay" data-parent="#accordion">In the Context of Race</a>
-              </div>
-              <div id="collapse8" class="panel-collapse collapse in">
-                <div class="panel-body2">
-                  <input type="radio" id="noOverlay radiobutton"> No Overlay <br/> </button>
-                  <input type="radio" id="firstOverlay radiobutton"> First Overlay </button>
-                </div>
-              </div>
-          </div> -->
-
-      <!-- </div> -->
-
-      <!-- INFO PARAGRAPHS START -->
-      <center>
-          <div class="InfoBody">
-
-              <div class="paragraph">
-                <h3 id="paragraphTitle">Background</h3>
-                <p>People need to meet certain requirements before they are able to vote in the United States.
-                  One requirement is that one must be a U.S. citizen. Citizenship eligibility has changed throughout
-                  the nation's history, which, among other privileges, has affected voting eligibilties of certain people.
-                  <a href="https://constitutioncenter.org/interactive-constitution/amendment/amendment-xiv" target="_blank" class="externallink">
-                    The Fourteenth Amendment</a> largely contributed toward widespread African American eligibility. As
-                  another example, the <a href="https://www.archives.gov/historical-docs/todays-doc/?dod-date=602" target="_blank" class="externallink">Indian Citizenship Act of 1924</a>
-                   was the first step toward a U.S.-born Native Americans vote.
-                </p>
-                <p>In both of these cases, however, other laws had to pass and be implemented for mass enablement,
-                  especially at the state level. For example, individual states still prohibited Native Americans from
-                  voting despite their status as citizens. This illustrates the importance of legislation and policy
-                  aligning at all levels for true voter empowerment.
-                </p>
-                <p>Many of the recent laws passed at the state level relate to the other basic requirements of voting.
-                  The following statements illustrate the connection between state laws and nationwide voting requirements.
-                  One must be 18 years old in order to vote, but some states make it easier for
-                  <a href="#earlyVoting" class="externallink">18 year old people to vote</a>
-                  than others. One has to to vote in their assigned district, which states
-                  <a href="#provisionalVote" class="externallink">differentailly enforce.</a> Registration is another prerequisite for voting,
-                  which also <a href="#onlineReg" class="externallink">differs from state to state.</a>
-                </p>
-              </div>
-              <br>
-              <div class="iframeWrapper">
-                <iframe id="videosource" src="https://www.youtube.com/embed/hBlSxGEGLIA" height="315" width="560" allowfullscreen="" frame="0">
-                </iframe>
-              </div>
-                <p class="paragraph">
-                  Judges of the state of Wisconsin made
-                  headlines in 2020 during the COVID-19 pandemic for ruling in favor of a conventional election day. At the state level,
-                  people were confronted with the decision to vote in a potentially deadly environment or miss out altogether. Many people
-                  opted out of voting, and some of those who voted possibly fell ill while doing so. This was not the result of laws in same way
-                  as the other examples are, but this was a state-level decision that contributed to voter discouragement by holding an in-person
-                  election during a viral outbreak.
-                </p>
-                <p class="paragraph">
-                  Indeed, it is at the state level where many of the federal decisions come to fruition or become practically
-                  useless. Today, state governments enjoy greater influence over voting laws than they did before, largely
-                  because of the 5-4 Supreme Court decision in <em>Shelby County v. Holder</em>.
-                </p>
-                <p class="paragraph">
-                  The <a href="https://constitutioncenter.org/interactive-constitution/amendment/amendment-xv" target="_blank" class="externallink">Fifteenth Amendment</a>
-                  protects citizens from discriminatory voting prohibitions, most notably
-                  racist prohibitions. Following the ratification of the Fifteenth Amendment, the States took advatange
-                  of their rights, courtesy of the <a href="https://constitutioncenter.org/interactive-constitution/amendment/amendment-x" target="_blank" class="externallink">Tenth Amendment</a>
-                  and <a href="https://constitutioncenter.org/interactive-constitution/article/article-iv" target="_blank" class="externallink">Article Four of the Consitution</a>,
-                  to undo its enfranchisement.
-                  Voter suppression infamously manifested as literacy tests and poll taxes, along with other tactics that
-                  usually hindered black Americans from voting. Nearly a century after the Fifteenth Amendment, one of the
-                  country's most important voting rights acts (1965) prohibited certain districts from changing their election
-                  laws. <a href="https://www.justice.gov/crt/history-federal-voting-rights-laws" target="_blank" class="externallink">The Voting Rights Act of 1965</a>
-                  targeted very suppressive districts. Whenever these districts changed their election processes, they were obligated
-                  to report their intention to not negatively impact minorities.
-                  The Voting Rights Act of 1965 targeted the places which had voting tests and less than a 50 % voter turnout in 1964.
-                </p>
-                <p class="paragraph">
-                  However, the constitutionality of the Voting Rights Act of 1965 was brought into question in <em>Shelby County v.
-                  Holder.</em> The court case had two sections from the Act that were of interest. The sections made places prove to the either the Attorney General or a D.C.
-                  district court judge panel that they were not discriminating against minorites. The 5-4 decision was that Section
-                  4 of the Voting Rights Act of 1965 was unconstitutional. To justify the decision, the judges said that the discrimination
-                  targeted by the Section was no longer an issue. Once that decision passed, states no longer had to answer
-                  to an authority concerning the potentially negative effects of their election laws. The result has been stricter laws,
-                  which, like before, act to suppress minority votes.
-                </p>
-                <div id="earlyVoting" class="paragraph">
-                  <h3 id="paragraphTitle">Early Voting Status</h3>
-                </div>
-                <h3 id="imageTitle">Early Voting Variations</h3>
-                <center><img src="assets/Early Voting.png" alt="Early Voting Visual" class="img-responsive" id="embeddedImg"></center>
-                <p class="paragraph">
-                  Early voting, as in voting before election day, in the United States initially served to accommodate rural voters who had to travel far to cast a ballot.
-                  This practice dwindled into late 20th century, with many states only offering an option for absentee voting. Even then,
-                  an excuse had to provided, as is still the case in some states. There are drawbacks to early in-person voting
-                  such as greater costs for campaigning and the possibility of prematurely casting a vote. The recent resurgence of early voting
-                  in most states has been largely an accessibility issue. Many Americans do in fact vote before election day, with probably
-                  <a href="https://www.pewresearch.org/fact-tank/2016/10/21/for-many-americans-election-day-is-already-here/" target="_blank" class="externallink">a third
-                  of them</a> doing so during the 2010s. While there are a number of reasons why people might vote early, one obvious motivation is to
-                  avoid the struggle of voting on a work day.
-                  <a href="https://www.bls.gov/news.release/ebs.t05.htm" target="_blank" class="externallink">The Bureau of Labor Statistics</a>
-                  releases information relevant to this topic. Certain lines of work yield less days off than others, with minority populations
-                  typically occupying these less accommodating positions. There are other obstacles to voting on a single predefined day, such as
-                  obligations to caretaking. Lastly, just as rural voters were given a larger window of time by the first
-                  implementations of early voting, rural voters today need to set aside more time if they wish to reach a polling place.
-                </p>
-                <div id="provisionalVote" class="paragraph">
-                  <h3 id="paragraphTitle">Provisional Votes</h3>
-                </div>
-                <p class="paragraph">Provisional ballots give people a chance to vote when they otherwise couldn't. Usually, a person acquires a provisional
-                ballot when their voting eligibility cannot be validated. These special ballots are typically set aside and then determined
-                to be either legitimate or not. States have different procedures for provisional votes. The end results of provisional ballots
-                cast in the wrong precinct are depicted in the map above. However, the states also differ in what can warrant a provisonal ballot.
-                Some states, for example, give out provisional ballots when a person's name or address changes. Some states will not give
-                provisional ballots under such circumstances. There are also various methods for addressing provisional ballots at a later date,
-                which either requires some action from the voter, such as definitively proving eligibility, or a careful inspection by local
-                elections officials. Finally, there are different reasons for nullifying provisional ballots. One of the most common reasons is
-                that the voter is not registered. Some places are stricter, requiring voters to <a href="#voterID" class="externallink">show a valid photo ID</a>
-                in a certain time frame lest the provisional ballot is rejected.
-                </p>
-                <div id="onlineReg" class="paragraph">
-                  <h3 id="paragraphTitle">Online Registration</h3>
-                </div>
-                <p class="paragraph">
-                  All states have paper registration, but not all states have online registration. Online registration generally costs less per applicant
-                  than paper registration. This probably explains the currently high
-                  adoption rate of onilne registration at the state level. For voters, online regstration methods offer convenience and
-                  expedience. However, this assumes that a given voter can access and navigate the internet.
-                  Also, some voters are uncomfortable submitting their sensitive information online. Therefore, states that offer both paper
-                  and online registration are the most enabling.
-                </p>
-                <div id="voterID" class="paragraph">
-                  <h3 id="paragraphTitle">Voter ID Laws and Voter Suppression</h3>
-                </div>
-                <br>
-                <div class="iframeWrapper">
-                  <iframe id="videosource" src="https://www.youtube.com/embed/3cUqRhYCGxw" height="315" width="560" allowfullscreen="" frame="0">
-                  </iframe>
-                </div>
-                <p class="paragraph">
-                  Out of the laws explored here, voter ID laws are probably most associated with current attempts at voter suppression.
-                  The more identification requirements there are, the less racial minorities, low-income populations, and elderly
-                  populations are able to vote. Stricter laws result in lower participation across the board, but the demographics
-                  mentioned are <a href="https://www.washingtonpost.com/news/fact-checker/wp/2017/05/30/do-voter-id-laws-help-or-hurt-voter-turnout/" target="_blank" class="externallink">disproportionately affected.</a>
-                  A key obstacle for these groups are the costs of getting photo IDs. Also,
-                  less abled people are not as likely to gather all necessary documents for their state and report to a polling place on time.
-                  Critics of these new laws point out that the country was improving its voting
-                  policies before the recent wave of restrictive state legislation. Promoters of these new laws often point to
-                  <a href="https://www.heritage.org/election-integrity/heritage-explains/voter-fraud" target="_blank" class="externallink">voter fraud</a>
-                  as a reason for having them.
-                </p>
-                <div id="Conclusion" class="paragraph">
-                  <h3 id="paragraphTitle">Conclusion</h3>
-                  One of the easiest ways to see geographical variation in voting abilities is to compare the states by different laws.
-                  Hopefully, the map offers some insight into which states are currently more disabling or more enabling. Coming to conclusions
-                  about voter supression is beyond the means of this site, but our "composite grade" shows how single differences can accumulate
-                  to make larger voting disparities between states. It is important to keep in mind that these laws can change quickly, as was
-                  the case in many states after 2013. These laws can improve just as fast, so it's important for people to support such improvements
-                  in whatever ways they can. For those of you who are able to vote, please do so!
-                </div>
-              </div>
-            </div> <!-- End of InfoBody -->
-      </center>
-      <br>
-      <br>
-      <br>
-      <!-- END OF INFO PARAGRAPHS -->
-
-      <!-- Sources Div -->
-
-      <div class="closer">
-
-          <div class="area2">
-            <ul class="circles2">
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-            </ul>
-          </div>
-
-          <div class="source-creator-row">
-
-            <div class="source-column">
-              <h1 id="sources-title">Sources:</h1>
-              <p id="sources">
-                <a id="portfoliolinks" href="https://www.ncsl.org/" target="_blank">National Conference of State Legislatures</a>
-                <br>
-                <br>
-                <a id="portfoliolinks" href="https://www.propublica.org/article/everything-youve-ever-wanted-to-know-about-voter-id-laws" target="_blank">ProPublica: Voter ID Laws</a>
-                <br>
-                <br>
-                <a id="portfoliolinks" href="https://www.narf.org/cases/voting-rights/" target="_blank">Native American Rights Fund: Voting Rights</a>
-                <br>
-                <br>
-                <a id="portfoliolinks" href="https://www.brennancenter.org/" target="_blank">Brennan Center for Justice</a>
-              </p>
-            </div>
-
-            <div class="creator-column">
-              <h1 id="sources-title">Creators:</h1>
-              <p id="sources">
-                <a id="portfoliolinks" href="" target="_blank">Chris's Portfolio</a>
-                <br>
-                <br>
-                <a id="portfoliolinks" href="" target="_blank">Regan's Portfolio</a>
-                <br>
-                <br>
-                <a id="portfoliolinks" href="https://mbiehlgis.github.io/Portfolio/" target="_blank">Mike's Portfolio</a>
-              </p>
-            </div>
-
-          </div>
-      </div>
+    </div>
 
 
-
-      <!-- RETRIEVE PANEL START -->
-      <!-- <div class="retrieveContainer">
-          <div class="retrievePanel">
-            <p id ="retrieveTitle" style="color : white" >
-              State
-              <br>
-              Grade:
-              <br>
-              Online Registration:
-              <br>
-              Early Voting Status:
-              <br>
-              Voter ID Requirement:
-              <br>
-              Election Day Vote:
-              <br>
-              Rights Lost to Felons:
-              <br>
-              Incorrectly Cast Provisional Vote:
-            </p>
-
-          </div>
-      </div> -->
-      <!-- RETRIEVE PANEL END -->
-
-      <!-- </div > -->
-
-
-
-        <!--you can also use this space for internal scripts;
+    
+    
+    <!--you can also use this space for internal scripts;
         place these within <script> tags-->
+          <!-- <script src="lodash.js"></script> -->
+    <script type="text/javascript" src="lib/chroma.js"></script>
+    <script type="text/javascript" src="lib/d3.js"></script>
+    <script type="text/javascript" src="js/leaflet-src.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.js"></script>
 
-        <!--put your external script links here-->
-        <script type="text/javascript" src="lib/jquery-3.4.1.js"></script>
-        <script type="text/javascript" src="lib/d3/d3.js"></script>
-        <script type="text/javascript" src="lib/topojson.js"></script>
-        <script type="text/javascript" src="lib/ss.js"></script>
-        <script type="text/javascript" src="lib/bootstrap.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
-    </body>
+    <!--put your external script links here-->
+
+    <script type="text/javascript" src="js/jquery-3.5.1.js"></script>
+    <!-- <script type="text/javascript" src="js/adaptedTutorial.js"></script> -->
+    <script type="text/javascript" src="js/main_.js"></script>
+  </body>
 </html>
