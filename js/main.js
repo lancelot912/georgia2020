@@ -1,311 +1,307 @@
-// Lab2 GEOG575 Lance Lazarte \\
-(function(){
+//begin script when window loads
+window.onload = setMap();
 
-    //pseudo-global variables
-    var attrArray = ["Labor Force", "Employed", "Unemployed", "Unemployment Rate", "Median Household Income", "Med HH Income Percent of State Total"]; //list of attributes
-    var expressed = attrArray[0]; //initial attribute
-
-   
-    //begin script when window loads
-    window.onload = setMap();
-
-    //set up choropleth map
-    function setMap(){
+// variables for data join from csv
+var attrArray = ["labor", "totalvotes", "demographic", "income", "education"];
+var expressed = attrArray[7];
+var expressedOpt = ["Labor Force", "Employed", "Unemployed", "UnemploymentRate"]; //initial attribute
+var collapse2Data = attrArray[1];
+var collapse2Opt = ["All Votes", "Democratic Votes %", "Republican Votes %", "Libertarian Votes %"];
+var collapse3Data = attrArray[5];
+var collapse3Opt = ["Black Female", "Black Male", "White Female", "White Male", "Asian", "Hispanic", "White Male"];
+var collapse4Data = attrArray[0]; //YES OR NO - check if number
+var collapse4Opt = ["yes", "no"];
+var collapse5Data = attrArray[2];
+var collapse5Opt = ["None", "ID Requested (General)", "Photo ID Requested", "Strict Proof of Identity", "Strict Photo ID"];
+var collapse6Data = attrArray[3];
+var collapse6Opt = ["Yes", "Sometimes","No"];
+var collapse7Data = attrArray[4];
+var collapse7Opt = ["Never", "When Incarcerated", "Until Sentence Complete", "Strictest"];
+var stateAbbs = ["AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
+//set up choropleth map
+function setMap(){
 
     //map frame dimensions
-    var width = 1000,
-        height = 800;
-
+    var width = 700,
+        height = 460;
 
     //create new svg container for the map
-    var map = d3.select("body")
+    var map = d3.select("div.mapContainer")
         .append("svg")
         .attr("class", "map")
         .attr("width", width)
         .attr("height", height);
 
-    //create Albers equal area conic projection centered on Philippines
-    var projection = d3.geo.mercator()
-                .center([82.90, 32.17])
-                .scale(2500)
-                .translate([width / 2, height / 2]);
+        //create custom d3 albers projection specific for the US
+        var projection = d3.geoAlbersUsa()
+            .scale(950)
+            .translate([width / 2, height / 2]);
 
-    var path = d3.geo.path()
-        .projection(projection);
+        var path = d3.geoPath()
+            .projection(projection);
 
+    //use Promise.all to parallelize asynchronous data loading
+    var promises = [];
+    promises.push(d3.csv('data/State_Voting_Laws_Updated.csv')); //Load CSV attributes
+    promises.push(d3.json("data/USAFinalProjectTopo.json"));    //load choropleth spatial data
+    promises.push(d3.json("data/GreatLakesTopo.json"));         //loads great lakes layers
 
-    //use d3.queue to parallelize asynchronous data loading
-    d3.queue()
-    .defer(d3.csv, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/georgia.csv?token=APHYF62MBJ2IJLOOHSAL6Y3A76RVS") //load attributes from csv
-    .defer(d3.json, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/us_states.topojson?token=APHYF65ABPARSJGO3F7Q4YLA76RUC") //load background spatial data
-    .defer(d3.json, "https://raw.githubusercontent.com/lancelot912/georgia/main/data/georgia.topojson?token=APHYF6ZXAYQLOSC6EMOL32LA76RSO") //load choropleth spatial data
-    .await(callback);
+    Promise.all(promises).then(callback);
 
+    function callback(data){
+      	csvData = data[0];
+      	usa = data[1];
+        bigLakes = data[2];
 
+        //translate US TopoJSON
+        var usaStates = topojson.feature(usa, usa.objects.USAFinalProject).features,
+            greatLakes = topojson.feature(bigLakes, bigLakes.objects.GreatLakes);
 
-    //Callback within setMap
-    function callback(error, csvData, usstates, ga){
-        
-        setGraticule(map, path);
+        // join csv data to GeoJSON data
+        usaStates = joinData(usaStates, csvData);
+        //add enumeration units to the map
+        setEnumerationUnits(usaStates, map, path);
 
-                //translate SE Asia and Philippine Regions TopoJSON
-                var usstates = topojson.feature(usstates, usstates.objects.us_states),
-                    ga = topojson.feature(ga, ga.objects.georgia).features;
-
-
-    //add SE Asian countries to map
-    var countries = map.append("path")
-            .datum(usstates)
-            .attr("class", "countries")
+        //add great lakes to map
+        var lakes = map.append("path")
+            .datum(greatLakes)
+            .attr("class", "lakes")
             .attr("d", path);
-        
-    //join csv data to GeoJSON enumeration units
-    ga = joinData(ga, csvData);
 
-        //create the color scale
-        var colorScale = makeColorScale(csvData);
-
-    //add enumeration units to the map
-        setEnumerationUnits(ga, map, path, colorScale);
-        setChart(csvData, colorScale);
-        createDropdown(csvData)
-        };
     };
 
+};
 
-    function setGraticule(map, path){
-        //create graticule generator
-        var graticule = d3.geo.graticule()
-            .step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
-        
-        //create graticule background
-        var gratBackground = map.append("path")
-            .datum(graticule.outline()) //bind graticule background
-            .attr("class", "gratBackground") //assign class for styling
-            .attr("d", path) //project graticule
-
-        //create graticule lines
-        var gratLines = map.selectAll(".gratLines") //select graticule elements that will be created
-            .data(graticule.lines()) //bind graticule lines to each element to be created
-            .enter() //create an element for each datum
-            .append("path") //append each element to the svg as a path element
-            .attr("class", "gratLines") //assign class for styling
-            .attr("d", path); //project graticule lines
-    };
-
-
-
-    function joinData(philRegions, csvData){
-    //loop through csv to assign each set of csv attribute values to geojson region
+function joinData(usaStates, csvData){
+    // assign csv attributes to GeoJSON with each loop
     for (var i=0; i<csvData.length; i++){
-        var csvRegion = csvData[i]; //the current region
-        var csvKey = csvRegion.FIPS; //the CSV primary key
+        // index states
+        var csvState = csvData[i];
+        // name is joining field
+        var csvKey = csvState.name;
+        csvKey = csvKey.replace(" ", "_").trim();
 
-        //loop through geojson regions to find correct region
-        for (var a=0; a<ga.length; a++){
+        // loop through GeoJSON states to find correct one
+        for (var a=0; a<usaStates.length; a++){
+            var geojsonProps = usaStates[a].properties,
+            geojsonKey = geojsonProps.name;
+            geojsonKey = geojsonKey.replace(" ", "_").trim();
 
-            var geojsonProps = philRegions[a].properties; //the current region geojson properties
-            var geojsonKey = ga.FIPS; //the geojson primary key
-
-            //where primary keys match, transfer csv data to geojson properties object
+            // conditional statement transferring data when names match
             if (geojsonKey == csvKey){
-
-                //assign all attributes and values
+                // when condition met, assign attributes and values
                 attrArray.forEach(function(attr){
-                    var val = parseFloat(csvRegion[attr]); //get csv attribute value
-                    geojsonProps[attr] = val; //assign attribute and value to geojson properties
+                    // make variable equal to csv value, check if float or string
+                    var val = csvState[attr];
+                    if(!isNaN(csvState[attr])) {
+                      val=parseFloat(csvState[attr]);
+                    }
+                    // assign value to GeoJSON
+                    geojsonProps[attr] = val;
                 });
             };
+
         };
     };
-        
-    return ga;
-
-    };
+    return usaStates;
+};
 
 
-
-    function setEnumerationUnits(ga, map, path, colorScale){
-        //add Philippine regions to map
-        var regions = map.selectAll(".regions")
-            .data(ga)
-            .enter()
-            .append("path")
-            .attr("class", function(d){
-                return "regions " + d.properties.FIPS;
-            })
-            .attr("d", path) 
-            .style("fill", function(d){
-            return choropleth(d.properties, colorScale);
-            })
-            .on("mouseover", function(d){
-            highlight(d.properties);
-            })
-            .on("mouseout", function(d){
-            dehighlight(d.properties)   
-            })
-            .on("mousemove", moveLabel);
-        var desc = regions.append("desc")
-        .text('{"stroke": "#444336", "stroke-width": "0.5px"}');
-    };
-
-
-
-    //function to create color scale generator
-    function makeColorScale(data){
-    var colorClasses = [
-        "#eed000",
+//function to create color scale generator
+function findFill(data, attArray){
+    // PURPLE COLOR SCALE
+    var  colorClasses = [
+        "#f2f0f7",
+        "#cbc9e2",
+        "#9e9ac8",
+        "#756bb1",
+        "#54278f"
     ];
-
-    //create color scale generator
-    var colorScale = d3.scale.threshold()
-        .range(colorClasses);
-
-
-    //build array of all values of the expressed attribute
-    var domainArray = [];
-    for (var i=0; i<data.length; i++){
-        var val = parseFloat(data[i][expressed]);
-        domainArray.push(val);
+    if(attArray.length == 5) {
+      if(data == attArray[0]) {
+        return colorClasses[0];
+      } else if (data == attArray[1]) {
+        return colorClasses[1];
+      } else if (data==attArray[2]) {
+        return colorClasses[2];
+      } else if (data==attArray[3]) {
+        return colorClasses[3];
+      } else if(data==attArray[4]){
+        return colorClasses[4];
+      };
     };
 
-    //cluster data using ckmeans clustering algorithm to create natural breaks
-    var clusters = ss.ckmeans(domainArray, 1);
-    //reset domain array to cluster minimums
-    domainArray = clusters.map(function(d){
-        return d3.min(d);
-    });
-    //remove first value from domain array to create class breakpoints
-    domainArray.shift();
-
-    //assign array of last 4 cluster minimums as domain
-    colorScale.domain(domainArray);
-
-    return colorScale;
+    if(attArray.length == 4) {
+      if(data == attArray[0]) {
+        return colorClasses[0];
+      } else if (data == attArray[1]) {
+        return colorClasses[1];
+      } else if (data==attArray[2]) {
+        return colorClasses[2];
+      } else if (data==attArray[3]) {
+        return colorClasses[4];
+      };
     };
 
-    
+    if(attArray.length == 3) {
+      if(data == attArray[0]) {
+        return colorClasses[0];
+      } else if (data == attArray[1]) {
+        return colorClasses[2];
+      } else if (data==attArray[2]) {
+        return colorClasses[4];
+      };
+    };
 
-    //function to test for data value and return color
-    function choropleth(props, colorScale){
-    //make sure attribute value is a number
-        var val = parseFloat(props[expressed]);
-        //if attribute value exists, assign a color; otherwise assign gray
-        if (typeof val == 'number' && !isNaN(val)){
-            return colorScale(val);
-        } else {
-            return "#d9d9d9";
-        };
-        };
+    if(attArray.length == 2) {
+      if(isNaN(data)) {
+        return  colorClasses[4];
+      } else {
+        return colorClasses[0];
+      };
+    };
 
+  };
 
+function setEnumerationUnits(usaStates, map, path){
 
-   
-    //function to create a dropdown menu for attribute selection
-    function createDropdown(csvData){
-    //add select element
-    var dropdown = d3.select("body")
-        .append("select")
-        .attr("class", "dropdown")
-        .on("change", function(){
-            changeAttribute(this.value, csvData)
-        });
-
-    //add initial option
-    var titleOption = dropdown.append("option")
-        .attr("class", "titleOption")
-        .attr("disabled", "true")
-        .text("Pick A Year");
-
-    //add attribute name options
-    var attrOptions = dropdown.selectAll("attrOptions")
-        .data(attrArray)
+    //add states to map
+    var states = map.selectAll(".states")
+        .data(usaStates)
         .enter()
-        .append("option")
-        .attr("value", function(d){ return d })
-        .text(function(d){ return d });
-    };
-    
-    //dropdown change listener handler
-    function changeAttribute(attribute, csvData){
-    //change the expressed attribute
-    expressed = attribute;
-    };
-
-    //function to highlight enumeration units and bars
-    function highlight(props){
-    //change stroke
-    var selected = d3.selectAll("." + props.FIPS)
-        .style("stroke", "aqua")
-        .style("stroke-width", "2");
-    setLabel(props)
-    };
-
-    //function to reset the element style on mouseout
-    function dehighlight(props){
-    var selected = d3.selectAll("." + props.FIPS)
-        .style("stroke", function(){
-            return getStyle(this, "stroke")
+        .append("path")
+        .attr("class", function(d){
+            return "State:" + d.properties.StateAbb;
         })
-        .style("stroke-width", function(){
-            return getStyle(this, "stroke-width")
+        .attr("id", function(d){
+            return d.properties.StateAbb;
+        })
+        .attr("d", path)
+          .on("mouseover", function(d){
+              highlight(d.properties, usaStates);
+          })
+          .on("mouseout", function(d){
+              dehighlight(d.properties, usaStates);
+          })
+        .attr("fill", function(d) {
+          return findFill(d.properties["Grade"], expressedOpt);
         });
 
-    function getStyle(element, styleName){
-        var styleText = d3.select(element)
-            .select("desc")
-            .text();
 
-        var styleObject = JSON.parse(styleText);
+        $(".collapsed1").click(function() {
+          for(var i =0; i < stateAbbs.length; i++) {
+            map.select("#" + stateAbbs[i])
+              .attr("fill", function(d) {
+                return findFill(d.properties["Grade"], expressedOpt);
+              });
+          };
+        });
+        $(".collapsed2").click(function() {
+          for(var i =0; i < stateAbbs.length; i++) {
+            map.select("#" + stateAbbs[i])
+              .attr("fill", function(d) {
+                return findFill(d.properties["EarlyVotingStatus"], collapse2Opt);
+              });
+          };
+        });
+        $(".collapsed3").click(function() {
+          for(var i =0; i < stateAbbs.length; i++) {
+            map.select("#" + stateAbbs[i])
+              .attr("fill", function(d) {
+                return findFill(d.properties["IncorrectlyCastProvisionalVote"], collapse3Opt);
+              });
+          };
+        });
+        $(".collapsed4").click(function() {
+          for(var i =0; i < stateAbbs.length; i++) {
+            map.select("#" + stateAbbs[i])
+              .attr("fill", function(d) {
+                return findFill(d.properties["OnlineRegImplementYr"], collapse4Opt);
+              });
+          };
+        });
+        $(".collapsed5").click(function() {
+          for(var i =0; i < stateAbbs.length; i++) {
+            map.select("#" + stateAbbs[i])
+              .attr("fill", function(d) {
+                return findFill(d.properties["VoterIDRequirement"], collapse5Opt);
+              });
+          };
+        });
+        $(".collapsed6").click(function() {
+          for(var i =0; i < stateAbbs.length; i++) {
+            map.select("#" + stateAbbs[i])
+              .attr("fill", function(d) {
+                return findFill(d.properties["ElectionDayVoteCenters"], collapse6Opt);
+              });
+          };
+        });
+        $(".collapsed7").click(function() {
+          for(var i =0; i < stateAbbs.length; i++) {
+            map.select("#" + stateAbbs[i])
+              .attr("fill", function(d) {
+                return findFill(d.properties["RightsLosttoFelons"], collapse7Opt);
+              });
+          };
+        });
 
-        return styleObject[styleName];
-    };
-
-    d3.select(".infolabel")
-        .remove();
-    };
+      //alternate dehighlight for fill
+      var desc = states.append("desc")
+          .text('{"fill": "#000"}');
+};
 
 
-    //function to create dynamic label
-    function setLabel(props){
-    //label content
-    var labelAttribute = "<h1>" + props[expressed] +
-                "</h1><b>" + expressed + "</b>";
+function highlight(props, usaStates){
+    //             //change STROKE highlight method
+    //Call setlabel to create label
+    for(var i =0; i < stateAbbs.length; i++) {
+      var tempStr = "#" + stateAbbs[i];
+      d3.selectAll(tempStr)
+        .style("opacity", "0.5");
+    }
+    var selected = d3.selectAll("#" + props.StateAbb)
+        .style("stroke", "#00FFFF") //highlight color
+        .style("stroke-width", "2px")
+        .style("opacity", "1"); //highlight width
+    setLabel(props);
+};
 
-    //create info label div
-    var infolabel = d3.select("body")
-        .append("div")
-        .attr("class", "infolabel")
-        .attr("id", props.FIPS + "_label")
-        .html(labelAttribute);
+//function to reset the element style on mouseout
+function dehighlight(props, usaStates, rectA, rectB, rectC, rectD, rectF){
+  //             // STROKE DEHIGHLIGHT
+  for(var i =0; i < stateAbbs.length; i++) {
+    var tempStr = "#" + stateAbbs[i];
+    d3.selectAll(tempStr)
+      .style("opacity", "1");
+  }
+  var selected = d3.selectAll("#" + props.StateAbb)
+        .style("stroke-width", "1.1px")
+        .style("stroke", "#fff");
+  defaultPanel();
 
-    var regionName = infolabel.append("div")
-        .attr("class", "labelname")
-        .html(props.FIPS);
-    };
+};
 
+//function to create dynamic label
+function setLabel(props){
 
-    //function to move info label with mouse
-    function moveLabel(){
-    //get width of label
-    var labelWidth = d3.select(".infolabel")
-        .node()
-        .getBoundingClientRect()
-        .width;
+  //Update retrieve panel inner HTML with hover
+  var textBox = props.name +"<br/>" + "Grade: " + props.Grade + "<br/>";
+  if(isNaN(props["OnlineRegImplementYr"])) {
+    textBox+= "Online Registration: No<br/>";
+  } else {
+    textBox+= "Online Registration: Yes<br/>";
+  };
+  textBox+="Early Voting Status: " + props["EarlyVotingStatus"] + "<br/>" + "Voter ID Requirement: " + props["VoterIDRequirement"] + "<br/>";
+  textBox+= "Election Day Vote Centers: " + props["ElectionDayVoteCenters"] + "<br/>";
+  textBox+= "Voting Rights Lost to Felons: " + props["RightsLosttoFelons"] + "<br/>";
+  textBox+= "Incorrectly Cast Provisional Vote: " + props["IncorrectlyCastProvisionalVote"] + "<br/>";
 
-    //use coordinates of mousemove event to set label coordinates
-    var x1 = d3.event.clientX + 20,
-        y1 = d3.event.clientY - 20,
-        x2 = d3.event.clientX - labelWidth - 10,
-        y2 = d3.event.clientY + 5;
+  document.getElementById("retrieveTitle").innerHTML=textBox;
+  d3.select("#retrieveTitle")
+    .style("size", "14pt")
+    .style("color", "white"); //retrieve text color
 
-    //horizontal label coordinate, testing for overflow
-    var x = d3.event.clientX > window.innerWidth - labelWidth - 20 ? x2 : x1; 
-    //vertical label coordinate, testing for overflow
-    var y = d3.event.clientY < 75 ? y2 : y1; 
-
-    d3.select(".infolabel")
-        .style("left", x + "px")
-        .style("top", y + "px");
-    };
-    })();
+};
+function defaultPanel() {
+  document.getElementById("retrieveTitle").innerHTML="No State Selected";
+};
