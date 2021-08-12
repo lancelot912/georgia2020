@@ -6,10 +6,14 @@
     <title></title>
 
     <!--put your external stylesheet links here-->
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="lib/leaflet.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-
+    	<!--put your external stylesheet links here-->
+      <link rel="stylesheet" type ="text/css" href="css/normalize.css">
+      <link rel="stylesheet" type ="text/css" href="css/leaflet.css">
+      
+      <link rel="shortcut icon" href="#"><!--fix the .ico error  -->
+      <link rel="stylesheet" type ="text/css" href="css/style.css">
+      
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   </head>
 
   <body>
@@ -22,10 +26,10 @@
             <h4 class="w-75 p-1">The Voters of Georgia</h4>
           </div>
           <div class="col-md-2 float-right">
+            
             <!-- Button trigger modal -->
-              <!-- Button trigger modal -->
-              <button id="modal-btn">About</button>
-              <div class="modal">
+            <button id="modal-btn">About</button>
+            <div class="modal">
                 <div class= "row">
                   <div class = "col-6 offset-3">
                     <div class="modal-content">
@@ -36,8 +40,8 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <div id="overlay"></div>  
+             </div>
+            <div id="overlay"></div>  
           </div>
         </div>
       </div>
@@ -47,12 +51,13 @@
 
         <div class="row align-items-center">
 
+          <!--DropDown Container-->
           <div class = "col-6">
 
             <div class="card" style="height: 120px">
               <div class="card-body">
 
-                
+                <!--Drop Down Selection Menu Category-->
                   <div class = "row">
                     <div class = "col-8">
                       <form name="form1" id="submit-form1">
@@ -69,7 +74,7 @@
                             </select>
                           </div>
                         </div>
-    
+                        <!--Drop Down Selection Menu Variables-->
                         <div class="form-group row">
                           <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Variables</label>
                           <div class="col-sm-7">
@@ -114,36 +119,29 @@
                       <div class = "button">
                         <button id = "reset-button" type="button" class="btn btn-warning btn-sm btn-block">Reset</button>
                       </div>
-                     
-                      
                     </div>
-                  
-                   
                 </div>
-                  
-
-                
               </div>
             </div>
-           
-          </div>
+          </div><!--End Dropdown Container-->
           
-
+          <!--Expressed Variable Info Window-->
           <div class = "col-5 offset-1 ">
-
+            <!--This is the info panel-->
             <div class="card" style="height: 120px">
               <div class="card-body">
-                <h5 id = "variable-name">Variable: Voter Population</h5>
-                <!-- <h5 class="card-title">Special title treatment</h5> -->
-                <p id = "variable-definition">Estimated voter population.</p>
+                <h5 id = "variable-name">Variable: Expressed on Load</h5>
+                
+                <p id = "variable-definition">Definition of Expresssed</p>
                 <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
               </div>
             </div>
-            
           </div>
         </div>
 
         <br>
+        
+        <!--Bar Chart-->
         <div class = "row">
           <!-- <div class = "card"> -->
             <div class = "mapcol col-7">
@@ -152,25 +150,16 @@
 
             <div class = "col-5">
               <div class = "row">
-                <div id = "bar-chart-title" class = "bar-chart-title chart-title">Total Population by County</div>
+                <div id = "bar-chart-title" class = "bar-chart-title chart-title">Bar Chart Title</div>
                 <div id = "barChart"></div>
               </div>
               <div class = "row">
-                <div id = "line-chart-title" class = "line-chart-title chart-title">Total Population by Georgia County 2020</div>
+                <div id = "line-chart-title" class = "line-chart-title chart-title">Expressed Values</div>
                 <div id = "lineChart"></div>
               </div>
             </div>
           <!-- </div> -->
         </div>
-
-        <div class = "row">
-          <div class = "col-4 offset-7">
-            <div id = "lineChart" width = 600 height =400></div>
-          </div>
-
-
-        </div>
-       
       </div>
     </div>
 
@@ -190,11 +179,19 @@
     <script type="text/javascript" src="lib/d3.js"></script>
     <script type="text/javascript" src="js/leaflet-src.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.js"></script>
-
+    <script type="text/javascript" src= "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js"></script>
     <!--put your external script links here-->
 
-    <script type="text/javascript" src="js/jquery-3.5.1.js"></script>
-    <!-- <script type="text/javascript" src="js/adaptedTutorial.js"></script> -->
-    <script type="text/javascript" src="js/main_.js"></script>
+    <!--FromAlissa-->
+    
+		<script src="js/main.js"></script>
+    <script src="lib/jquery-3.6.0.js"></script>
+    <script src="lib/d3.js"></script>
+    <script src="js/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!--<script src="https://unpkg.com/simple-statistics@7.7.0/dist/simple-statistics.min.js"></script>-->
+    <script src="js/main.js"></script>
+
+    
   </body>
 </html>
