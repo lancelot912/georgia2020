@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-  <title>Georgia 2020 Election</title>
+    <title>Georgia 2020 Election </title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -15,10 +15,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="lib/leaflet/leaflet-search.js"></script>
-	<script type="text/javascript" src="data/DenverCensusTracts.js"></script>
+	<script type="text/javascript" src="data/Demographics.js"></script>
 	<script type="text/javascript" src="data/Results.js"></script>
 	<script type="text/javascript" src="lib/jquery-3.3.1.js"></script>
-
   <style>
     /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
     .row.content {height: 750px}
@@ -26,7 +25,7 @@
     /* Set gray background color and 100% height */
     .sidenav {
       background-color: #f1f1f1;
-      height: 750px;
+      height: 100%;
     }
     
     /* Set black background color, white text and some padding */
@@ -53,27 +52,28 @@
    
 
     <div class="col-sm-9">
-      <div id='map' style="height:750px"></div>
+      <div id='map' style="height:750px" ></div>
     </div>
        <div class="col-sm-3 sidenav">
-      <h2 style="font-weight: bold">Georgia 2020 Election</h2>
-        <p  style="font-size: 14px"> What factors could have played a role in this historic election? Lets learn more about the voters of Georgia. Click an option below, select a factor, and hover a county to view exact details.  </p>
+      <h2 style="font-weight: bold" >Georgia 2020 Election</h2>
+           <p  style="font-size: 14px"> What factors could have played a role in this historic election? Lets learn more about the voters of Georgia. Click an option below, select a factor, and hover a county to view exact details.  </p>
       <ul class="nav nav-pills nav-stacked">
         <li class="active"><a href="index.html" title="This will show you the results" style="text-decoration: none; color:#fff;"> Results  </a></li>
-        <li class="active" ><a href="labor.html" title="This will show you labor statistics" style="text-decoration: none; color:#fff;"> Labor Statistics  </a></li>
+        <li class="active"><a href="labor.html" title="This will show you labor statistics" style="text-decoration: none; color:#fff;"> Labor Statistics  </a></li>
         <li class="active"><a href="education.html" title="This will show you education statistics" style="text-decoration: none; color:#fff;"> Education </a>  </li>
         <li class="active"><a href="demographics.html" title="This will show you voter demographics by race" style="text-decoration: none; color:#fff;"> Demographics by Race  </a></li>
       </ul><br>
-    <h4 style="font-weight: bold"> The map to the left shows the final results of the election per county</h4>
-        <p style="font-style: italic"> The 2020 Presidential election was a historic election. One of the biggest headlines from the election came out of Georgia. </p>
-        <p > In 2020, Biden won the state of Georgia. While the map to the left is mostly red, the larger cities and county were Democrat. If you hover over a county it will show the margin of victory. You can change the attribute to view the perentage of vote for each party. </p>
-
+            <h4 style="font-weight: bold"> The map to the left shows the voter demographics by race per county </h4>
+           <p style="font-style: italic"> Could voter demographics and voter diversity have played a role in the election?</p>
+           <p>Hover over a county to find details the voter population for each race. The data is derived from 
+            <a href="https://sos.ga.gov/index.php/Elections/voter_registration_statistics" target="_blank">https://sos.ga.gov/index.php/Elections/voter_registration_statistics</a></p>
     </div>
   </div>
 </div>
-<script type="text/javascript" src="js/georgiamain.js"></script>
+<script type="text/javascript" src="js/demo-main.js"></script>
 <footer class="container-fluid">
-  <p>Created By: <a href="https://www.thebalance.com/what-is-unemployment-3306222" target="_blank">Alissa Stark</a>, <a href="https://lancelot912.github.io/portfolio.html" target="_blank">Lance Lazarte</a>, <a href="https://jen-johnson.github.io/portfolio.html" target="_blank">Jenna Johnson</a></p>
+  <p>Created By: <a href="https://avstark-gis.github.io/avstark-gis-572Portfolio/" target="_blank">Alissa Stark</a>, <a href="https://lancelot912.github.io/portfolio.html" target="_blank">Lance Lazarte</a>, <a href="https://jen-johnson.github.io/portfolio.html" target="_blank">Jenna Johnson</a></p>
 </footer>
+
 </body>
 </html>
