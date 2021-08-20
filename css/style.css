@@ -19,7 +19,7 @@ html, body {
 .info h4 {
 	margin: 0 0 5px;
     font:14px;
-	color: #fff; 
+ 	color:#fff; 
 }
 
 .info h5 {
@@ -55,6 +55,8 @@ html, body {
 
 .leaflet-top, .leaflet-right{
 	margin: 10px;
+    font-size: 13px;
+    text-align: left;  /*was center*/
 }
 
 .header-basic .header-limiter {
@@ -112,4 +114,17 @@ a, svg, #modalButton {
   
 a:hover, #x {
 	color: #000000;
+ }
+ 
+ /*panel added styles*/
+ .ga2020title, .ga2020intro {
+    font-family: 'Poppins', sans-serif;
+   
+ }
+.ga2020title{
+    font-size:  40px;  
+}
+ .nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover{
+     background-color: crimson;
+     font-size: 16px;
  }

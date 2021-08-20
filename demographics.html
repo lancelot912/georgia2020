@@ -4,6 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+   <!--Google Fonts-->
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+ 
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
+   <!---------------------->
   <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -44,6 +53,14 @@
       .row.content {height: auto;} 
     }
   </style>
+  <style>
+    .leaflet-touch .leaflet-bar a:last-child {
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    /*This is the home button image*/
+    background-image: url("lib/leaflet/images/georgiaButton15px.jpg");
+ }
+  </style>
 </head>
 <body>
 
@@ -55,7 +72,7 @@
       <div id='map' style="height:750px" ></div>
     </div>
        <div class="col-sm-3 sidenav">
-      <h2 style="font-weight: bold" >Georgia 2020 Election</h2>
+      <h2 class="ga2020title" style="font-weight: bold" >Georgia 2020 Election</h2>
            <p  style="font-size: 14px"> What factors could have played a role in this historic election? Lets learn more about the voters of Georgia. Click an option below, select a factor, and hover a county to view exact details.  </p>
       <ul class="nav nav-pills nav-stacked">
         <li class="active"><a href="index.html" title="This will show you the results" style="text-decoration: none; color:#fff;"> Results  </a></li>
@@ -63,7 +80,7 @@
         <li class="active"><a href="education.html" title="This will show you education statistics" style="text-decoration: none; color:#fff;"> Education </a>  </li>
         <li class="active"><a href="demographics.html" title="This will show you voter demographics by race" style="text-decoration: none; color:#fff;"> Demographics by Race  </a></li>
       </ul><br>
-            <h4 style="font-weight: bold"> The map to the left shows the voter demographics by race per county </h4>
+            <h4 class="ga2020info" style="font-weight: bold"> The map to the left shows the voter demographics by race per county </h4>
            <p style="font-style: italic"> Could voter demographics and voter diversity have played a role in the election?</p>
            <p>Hover over a county to find details the voter population for each race. The data is derived from 
             <a href="https://sos.ga.gov/index.php/Elections/voter_registration_statistics" target="_blank">https://sos.ga.gov/index.php/Elections/voter_registration_statistics</a></p>

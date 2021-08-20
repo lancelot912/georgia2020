@@ -29,7 +29,7 @@ var map = L.map('map', {
           zoomInTitle: 'Zoom In',
           zoomOutText: '-',
           zoomOutTitle: 'Zoom Out',
-          zoomHomeText: 'H',
+          zoomHomeText: ' ',
           zoomHomeTitle: 'Return Home'
       },
   
@@ -464,7 +464,7 @@ function onEachFeature(feature, layer) {
 	
 					for (var i = 0; i < grades.length; i++) {
 						from = grades[i];
-						to = grades[i + 1]-1;  //the 9's  take out the -1 to 00 ex:(200-100)
+						to = grades[i + 1];  //-1 the 9's  take out the -1 to 00 ex:(200-100)
 						
 						//this is how the legend will display
 						labels.push(

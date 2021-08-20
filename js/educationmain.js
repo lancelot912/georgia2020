@@ -27,7 +27,7 @@ var map = L.map('map', {
           zoomInTitle: 'Zoom In',
           zoomOutText: '-',
           zoomOutTitle: 'Zoom Out',
-          zoomHomeText: 'H',
+          zoomHomeText: ' ',
           zoomHomeTitle: 'Return Home'
       },
   
